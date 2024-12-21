@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %} listes Produits {% endblock %}
+{% block content %}
+    <div id="product" class="mt-10">
+        <div id="prod_form" class="ml-28">
+            <a href="{% url 'product:create' %}" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+               <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                + Produit
+               </span>
+            </a>
+            <a href="{% url 'product:create_vente' %}" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+               <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                + Ventes du Jours
+               </span>
+            </a>
+            <a href="{% url 'product:create_stock' %}" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+               <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                + Produit Entrant
+               </span>
+            </a>
+            {% include 'prod/partial/prod_create_partial.html' %}
+        </div>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-5/6 rounded-lg mx-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Categorie
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Nom
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Quantité
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Unité
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Prix
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Disponibilité
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Date
+                            </th>
+                             <th scope="col" class="px-6 py-3">
+                                Action
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for prod in product %}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ prod.category|capfirst }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ prod.name|capfirst }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ prod.quantity }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ prod.unity }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ prod.price }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ prod.disponibility }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ prod.date }}
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                         <a href="{% url 'product:delete' prod.pk %} " class=" hover:bg-red-500 hover:p-1 hover:rounded-lg"> Supprimer </a>
+                         <a href="{% url 'product:update' prod.pk %} " class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-5"> Modifier </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+                </table>
+            </div>
+    </div>
+{% endblock %}
+<table class=" w-5/6 bg-white mx-auto text-black rounded-lg md:w-full">
+    <thead class="w-full">
+        <tr>
+            <th>Catégorie</th>
+            <th>Nom</th>
+            <th>Quantité</th>
+            <th>Prix</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="border">
+            <td>Ciment</td>
+            <td>Guepard</td>
+            <td>520</td>
+            <td>4200</td>
+        </tr>
+    </tbody>
+</table>
+

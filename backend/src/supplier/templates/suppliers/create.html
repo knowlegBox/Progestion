@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title  %} Créer Produit {% endblock %}
+{% block content  %}
+    <div class=" w-1/2 mx-auto mt-28 text-black  grid justify-items-center  ">
+        <h1 class="text-black bg-blue">{{title}}</h1>
+        <form action="" method="post" style="width:350px;" class=" py-5 grid justify-items-center space-y-5">
+            {% csrf_token %}
+                    <span class="text-black" style="display:none;">{{form.user}}</span>
+                    <span class="text-black">{{form.supplier}}</span>
+                    <span class="text-black">{{form.recipient_type}}</span>
+                    <span class="text-black">{{form.amount}}</span>
+            <button type="submit" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-green-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+                    <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                        Soumettre
+                    </span>
+            </button>
+        </form>
+    </div>
+
+{% endblock %}
+
+ <form action="" method="post">
+        {% csrf_token %}
+        <span class="text-black">{{form.user}}</span>
+        <span class="text-black">{{form.supplier}}</span>
+        <span class="text-black">{{form.recipient_type}}</span>
+        <span class="text-black">{{form.amount}}</span>
+        <input type="submit" value="Créer">
+    </form>
+<!--    <div id="cat">-->
+<!--        <button-->
+<!--                hx-get="{% url 'product:categorie' %}"-->
+<!--                hx-target="#cat"-->
+<!--                hx-swap="outerHTML"-->
+<!--        >+ Catégorie</button>-->
+<!--    </div>-->

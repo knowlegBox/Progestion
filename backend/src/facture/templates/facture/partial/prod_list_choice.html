@@ -1,0 +1,83 @@
+{% load humanize %}
+<div id="invoice" class="flex space-x-2">
+    <div  class="bg-gray-700 w-1/2 rounded-md border-white border-2 p-3"  >
+        <div id="">
+            
+            <div id="search" class="my-5 mx-auto flex flex-col">
+                <h4 class="text-center font-semibold font-serif">Rechercher Produit</h4>
+                <form action="" method="get" class="mx-auto w-96">
+                    {% csrf_token %}
+                    <input  autocomplete="off"
+                            hx-post="{% url 'search:product' %} "
+                            hx-trigger="keyup"
+                            hx-target="#product"
+                            type="text" name="search"  class=" w-96  rounded-lg text-black">
+                </form>
+            </div>
+            <div id="product"  >
+                <table class="w-full">
+                    <thead>
+                        <tr class=>
+                            <th class="">Produits</th>
+                            <th class=""> Prix</th>
+                            <th class="">Quantité</th>
+                            <th class="">Ajouter</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for prod in products %}
+                        <tr class="">
+                            <td class="border-none">
+                                {{prod.name}}
+                            </td>
+                            <td class="border-none">
+                                <input type="number" value={{prod.price}} name="price" class="text-black">
+                            </td>
+                            <td class="border-none">
+                                <input type="number" name="quantity" class="w-28 rounded-md" placeholder="Quantité">
+                            </td>
+                            <td class="border-none">
+                                <a hx-post="{% url 'mytest:add_line' %}
+                                    " class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-5">Ajouté</a>
+
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div  class="bg-blue-950 w-1/2 rounded-md border-white border-2 p-3 max-h-screen"  >
+        {% include 'partial/info_partial.html' %}
+    </div>
+</div>
+
+<!--                    <button type="submit" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-blue-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">-->
+<!--                        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">-->
+<!--                            Rechercher-->
+<!--                        </span>-->
+<!--                     </button>-->
+
+
+
+
+<!--{% for prod in products %}-->
+<!--                        <tr class="">-->
+<!--                            <td class="border-none">-->
+<!--                                {{prod.name}}-->
+<!--                            </td>-->
+<!--                            <td class="border-none">-->
+<!--&lt;!&ndash;                                {{prod.price|intcomma}}&ndash;&gt;-->
+<!--                                <input type="number" value={{prod.price}} name="" class="text-black">-->
+<!--                            </td>-->
+<!--                            <td class="border-none">-->
+<!--                                <input type="number" name="" class="w-28 rounded-md" placeholder="Quantité">-->
+<!--                            </td>-->
+<!--                            <td class="border-none">-->
+<!--                                <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-5">Ajouté</a>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    {% endfor %}-->

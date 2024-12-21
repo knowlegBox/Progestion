@@ -1,0 +1,393 @@
+{% load static %}
+{% load static tailwind_tags %}
+{% load humanize %}
+
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <script src="{% static 'htmx.min.js' %}" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+
+        <link rel="stylesheet" href="{% static 'mycss/style.css' %}">
+        <script defer src="{% static 'my_js/js_file.js'  %}"></script>
+
+        {% tailwind_css %}
+        <title>{% block title %} Accueil {% endblock %}</title>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js"></script>
+        <link rel="stylesheet" href="">
+        <style>
+            [contenteditable] {
+                outline: none;
+                border: 1px dashed transparent;
+                padding: 4px;
+                transition: border-color 0.2s ease;
+            }
+
+            [contenteditable]:focus {
+                    border-color: #4f46e5; /* Couleur de surbrillance */
+                    background-color: #f3f4f6; /* Couleur de fond légère */
+                }
+
+            .highlight {
+                text-decoration: underline;
+                text-underline-offset: 4px;
+                font-weight: bold;
+                background-color: #f3f4f6; /* Couleur de surbrillance */
+                color: #000; /* Texte en noir */
+                border-radius: 0.5rem;
+                text-align: center;
+            }
+            .btn_max{
+                @apply max-sm:flex 
+            }
+            .customTable{
+                @apply table-auto w-full text-sm text-left text-gray-500 dark:text-gray-400
+            }
+.autocomplete-suggestions {
+    position: absolute;
+    border: 1px solid #ddd;
+    background-color: white;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.autocomplete-suggestions li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.autocomplete-suggestions li:hover {
+    background-color: #f0f0f0;
+}
+            
+        </style>
+
+    </head>
+    <!--    nav bar    -->
+    {% include 'global/nav.html' %}
+    <!--     end nav bar-->
+    <body class="mt-20 ">
+    {% block content %}
+        <div id="product" class="max-sm:flex">
+<!--            <a href="{% url 'product:create' %}" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">-->
+<!--               <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">-->
+<!--                + Produit-->
+<!--               </span>-->
+<!--            </a>-->
+
+            <a href="{% url 'transaction:liste_spend' %}" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+               <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                + Dépenses
+               </span>
+            </a>
+
+        </div>
+        <div class="flex space-x-5 ml-5 max-sm:flex max-sm:flex-col mb-20">
+    <div class="max-h-[70vh] overflow-auto">
+        <h3 class="text-xl font-bold underline underline-offset-4 flex">Catégories</h3>
+        <table>
+            <thead>
+                <th style="display:none;">nom</th>
+                <th style="display:none;">action</th>
+            </thead>
+            <tbody>
+                {% for cat in category %}
+                <tr>
+                    <td style="border:none white 0px;">
+                        <h3
+                            hx-get="{% url 'cat_prod' cat.pk %}"
+                            hx-target="#table_prod"
+                            hx-swap="innerHTML"
+                            data-cat-id="{{ cat.pk }}"
+                            {% if forloop.first %}
+                                hx-trigger="load"
+                                class="pl-1 pr-2 underline highlight"
+                            {% else %}
+                            class="pl-1 pr-2 hover:underline hover:bg-white hover:text-black hover:rounded-lg hover:text-center"{% endif %}>
+                            {{ cat.name|capfirst }} <span>{{ qtite }}</span>
+                        </h3>
+                    </td>
+                    <td style="border:none white 0px;">
+                        <a href="{% url 'product:cat_delete' cat.pk %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2">
+                                <path d="M3 6h18"/>
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                                <line x1="10" x2="10" y1="11" y2="17"/>
+                                <line x1="14" x2="14" y1="11" y2="17"/>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div id="table_prod">
+        <!-- Contenu de la première catégorie sera chargé ici -->
+    </div>
+</div>
+
+        <div class="m-auto  w-2/3 flex">
+            <div class=" shadow-md sm:rounded-lg mt-5 w-full">
+        <table class="w-full customTable">
+                    <caption class="text-2xl font-bold text-white">Vente Journaliere</caption>
+
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+
+                    <th scope="col" class="px-6 py-3">
+                        Nom
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Quantité
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Prix
+                    </th>
+
+                    <th scope="col" class="px-6 py-3">
+                        Date
+                    </th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for produit in produit_dispo %}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td scope="row" class="px-6 py-4 w-[290px] text-wrap font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ produit.product }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ produit.quantity }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ produit.price|intcomma }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ produit.date|naturaltime }}
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+        </div>
+
+        {% endblock %}
+
+<script>
+           document.body.addEventListener("htmx:configRequest", (event) => {
+            event.detail.headers["x-CSRFToken"] = "{{ csrf_token }}";})
+
+        function removeItem(button) {
+            var item = button.parentNode;
+            item.parentNode.removeChild(item);
+        }
+        // Fermer la modale
+        document.addEventListener('htmx:afterSwap', (e) => {
+            if (e.target.id === 'modal-content') {
+                document.getElementById('modal').classList.remove('hidden');
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                document.getElementById('modal').classList.add('hidden');
+            }
+        });
+
+
+    // Activer le contenu éditable et envoyer les données sur focusout
+    document.addEventListener('focusout', function (e) {
+    // Vérifie si l'élément a l'attribut contenteditable
+    if (e.target.hasAttribute('contenteditable')) {
+        const name = e.target.getAttribute('data-name'); // Nom du champ (ex: "name", "price")
+        const value = e.target.textContent.trim();       // Nouvelle valeur entrée
+        const url = e.target.closest('[hx-put]')?.getAttribute('hx-put'); // Récupère l'URL de mise à jour
+
+        if (!url) {
+            console.error("URL de mise à jour introuvable !");
+            return;
+        }
+
+        // Configuration des en-têtes, y compris le CSRF Token
+        const csrftoken = getCookie('csrftoken');
+        const headers = {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+            'HX-Request': 'true'
+        };
+
+        // Préparer les données à envoyer
+        const body = JSON.stringify({ name: name, value: value });
+
+        // Envoyer la requête PUT
+        fetch(url, { method: 'PUT', headers: headers, body: body })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP : ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data.message || "Mise à jour réussie");
+                // Optionnel : ajouter un indicateur visuel de succès
+                e.target.classList.add('border-green-500');
+                setTimeout(() => e.target.classList.remove('border-green-500'), 1500);
+            })
+            .catch(err => {
+                console.error("Erreur :", err);
+                // Optionnel : ajouter un indicateur visuel d'erreur
+                e.target.classList.add('border-red-500');
+                setTimeout(() => e.target.classList.remove('border-red-500'), 1500);
+            });
+    }
+});
+
+// Fonction pour récupérer le CSRF Token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+    document.addEventListener('click', function (e) {
+        const target = e.target.closest('h3[data-cat-id]'); // Vérifie si on clique sur une catégorie
+        if (!target) return;
+
+        // Supprime la classe 'highlight' de toutes les catégories
+        document.querySelectorAll('h3[data-cat-id]').forEach(el => el.classList.remove('highlight'));
+
+        // Ajoute la classe 'highlight' à la catégorie cliquée
+        target.classList.add('highlight');
+    });
+    </script>
+</body>
+</html>
+<!--    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()">Open Modal</button>-->
+<!--    <div id="myModal" class="modal hidden fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex justify-center items-center">-->
+<!--          <div class="modal-content bg-white p-8 rounded shadow-lg">-->
+<!--            <div class="flex justify-end">-->
+<!--              <button onclick="closeModal()" class="text-gray-700 hover:text-gray-900">-->
+<!--                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>-->
+<!--                </svg>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--            <p>This is a modal popup with Tailwind CSS.</p>-->
+<!--          </div>-->
+<!--    </div>-->
+
+<!--    <script>-->
+<!--      function openModal() {-->
+<!--        document.getElementById('myModal').classList.remove('hidden');-->
+<!--      }-->
+
+<!--      function closeModal() {-->
+<!--        document.getElementById('myModal').classList.add('hidden');-->
+<!--      }-->
+<!--    </script>-->
+<!--    <script>-->
+<!--        const form = document.getElementById("myform");-->
+<!--const add_btn = document.getElementById("add_line");-->
+<!--const submit_btn = document.getElementById("submit_form");-->
+<!--let num = 0;-->
+
+<!--const createInput = (name, placeholder) => {-->
+<!--    const input = document.createElement("input");-->
+<!--    input.name = `${name}_${num}`;-->
+<!--    input.placeholder = placeholder;-->
+<!--    input.required = true; // rendre les champs obligatoires-->
+<!--    return input;-->
+<!--};-->
+
+<!--add_btn.addEventListener("click", function() {-->
+<!--    const div_element = document.createElement("div");-->
+<!--    div_element.className = "form-line";-->
+
+<!--    const inputs = [-->
+<!--        { name: "invoice", placeholder: "invoice" },-->
+<!--        { name: "product", placeholder: "product" },-->
+<!--        { name: "quantity", placeholder: "quantity" },-->
+<!--        { name: "price", placeholder: "price" }-->
+<!--    ];-->
+
+<!--    inputs.forEach(input => {-->
+<!--        div_element.appendChild(createInput(input.name, input.placeholder));-->
+<!--    });-->
+
+<!--    form.appendChild(div_element);-->
+<!--    num++;-->
+<!--});-->
+
+<!--// Fonction pour collecter les données du formulaire en tant qu'objet-->
+<!--const collectFormData = () => {-->
+<!--    const formData = new FormData(form);-->
+<!--    let data = {};-->
+
+<!--    formData.forEach((value, key) => {-->
+<!--        let [name, index] = key.split("_");-->
+<!--        if (!data[index]) {-->
+<!--            data[index] = {};-->
+<!--        }-->
+<!--        data[index][name] = value;-->
+<!--    });-->
+
+<!--    return data;-->
+<!--};-->
+
+<!--// Envoi du formulaire via AJAX-->
+<!--submit_btn.addEventListener("click", function(e) {-->
+<!--    e.preventDefault(); // Empêche le rechargement de la page-->
+
+<!--    const data = collectFormData();-->
+
+<!--    fetch("/fournisseur/create_invoice/", {-->
+<!--    method: "POST",-->
+<!--    headers: {-->
+<!--        "Content-Type": "application/json",-->
+<!--        "X-CSRFToken": csrftoken  // CSRF token ajouté ici-->
+<!--    },-->
+<!--    body: JSON.stringify(data)  // Données du formulaire en JSON-->
+<!--    })-->
+<!--    .then(response => response.json())-->
+<!--    .then(result => {-->
+<!--        console.log("Success:", result);-->
+<!--    })-->
+<!--    .catch(error => {-->
+<!--        console.error("Error:", error);-->
+<!--    });-->
+<!--});-->
+
+<!--    </script>-->
+<!--    <script>-->
+<!--    document.addEventListener('click', function (e) {-->
+<!--        const target = e.target.closest('h3[data-cat-id]'); // Vérifie si on clique sur une catégorie-->
+<!--        if (!target) return;-->
+
+<!--        // Supprime la classe 'highlight' de toutes les catégories-->
+<!--        document.querySelectorAll('h3[data-cat-id]').forEach(el => el.classList.remove('highlight'));-->
+
+<!--        // Ajoute la classe 'highlight' à la catégorie cliquée-->
+<!--        target.classList.add('highlight');-->
+<!--    });-->
+<!--</script>-->

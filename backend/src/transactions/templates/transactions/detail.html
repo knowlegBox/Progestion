@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title  %} Tous les Transactions {% endblock %}
+{% block content  %}
+
+<section class="mt-10">
+        <div>
+            <a href="{% url 'transaction:liste_spend' %}" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+               <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                + Dépenses
+               </span>
+            </a>
+        </div>
+    <div class="flex mt-5 space-x-5 w-full px-5">
+
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-1/2">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <caption class="dark:text-white text-white font-semi-bold text-xl p-2"> Dépôts</caption>
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                <th scope="col" class="px-6 py-3">
+                    Client
+                </th>
+
+                <th scope="col" class="px-6 py-3">
+                    Montant
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    date
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    <span class="sr-only">Action</span>
+                </th>
+            </tr>
+                </thead>
+                <tbody>
+                    {% for depot in depots %}
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ depot.user|capfirst }}
+                        </td>
+
+                <td class="px-6 py-4">
+                    {{ depot.amount|intcomma }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ depot.date }}
+                </td>
+
+                <th class="px-6 py-4 text-right space-x-2 ">
+                     <a href="{% url 'transaction:delete_dep' depot.pk %} " class=" hover:bg-red-500 hover:p-1 hover:rounded-lg"> Supprimer </a>
+                     <a href="{% url 'transaction:update_dep' depot.pk %} " class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-5"> Modifier </a>
+                </th>
+            </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+<!--    -&#45;&#45;&#45;&#45;&#45;&#45;&#4#45;&#45;&#45;&#45;&#45;-->
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-1/2">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <caption class="dark:text-white text-white font-semi-bold text-xl p-2"> Retraits</caption>
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                <th scope="col" class="px-6 py-3">
+                    Client
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Montant
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    date
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    <span class="sr-only">Action</span>
+                </th>
+            </tr>
+                </thead>
+                <tbody>
+                    {% for retrait in retraits %}
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+
+                                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ retrait.user|capfirst}}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ retrait.value|intcomma }}
+                                </td>
+
+                        <td class="px-6 py-4">
+                            {{ retrait.date }}
+                        </td>
+
+                        <th class="px-6 py-4 text-right space-x-2 ">
+                             <a href="{% url 'transaction:delete_wid' retrait.pk %} " class=" hover:bg-red-500 hover:p-1 hover:rounded-lg"> Supprimer </a>
+                             <a href="{% url 'transaction:update_wid' retrait.pk %} " class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-5"> Modifier </a>
+                        </th>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+</div>
+</section>
+{% endblock %}

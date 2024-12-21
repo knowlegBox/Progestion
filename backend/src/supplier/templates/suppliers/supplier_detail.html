@@ -1,0 +1,15 @@
+<!-- suppliers/templates/suppliers/supplier_detail.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supplier Detail</title>
+</head>
+<body>
+    <h1>{{ supplier.name }}</h1>
+    <p>Address: {{ supplier.address }}</p>
+    <p>Phone: {{ supplier.phone }}</p>
+    <p>Email: {{ supplier.email }}</p>
+    <a href="{% url 'supplier:supplier_list' %}">Back to Supplier List</a>
+</body>
+</html>

@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Listes bons commandes {% endblock %}
+{% block content %}
+<div id="product" class="mt-10 w-[1300px]" style="margin: auto;">
+   <div id="prod_form" class="ml-28 w-[1200px] flex item-center justify-between" style="margin: auto;">
+              <input
+                  hx-target="#supplier"
+                  hx-post = " {% url 'search:invoice_supplier'  %} "
+                  hx-trigger="keyup delay:100ms"
+                  autocomplete="on"
+                  placeholder="Rechercher bon fournisseur"
+                  type="search" name="search-supplier" id="search-supplier" class="[float:right] rounded-lg hover:border-blue-400 ">
+
+              <input
+                  hx-target="#client"
+                  hx-post = " {% url 'search:invoice_client'  %} "
+                  hx-trigger="keyup delay:100ms"
+                  autocomplete="on"
+                  placeholder="Rechercher bon client"
+                  type="search" name="search-client" id="search-client" class="[float:right] rounded-lg hover:border-blue-400 ">
+
+   </div>
+   <div class=" shadow-md sm:rounded-lg w-[1200px] flex item-center justify-between mt-10 mx-auto" >
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <caption class="text-xl font-semibold"> Facture Fournisseur</caption>
+
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 capitalize">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Fournisseur
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Numero
+                        </th>
+
+                        <th scope="col" class="px-6 py-3">
+                            Montant
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            date
+<!--                        </th>-->
+<!--                        <th scope="col" class="px-6 py-3">-->
+<!--                            <span class="">Action</span>-->
+<!--                        </th>-->
+                    </tr>
+                </thead>
+                <tbody id="supplier">
+                    {% for supplier in supplier %}
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="border-red-400 border-lg px-1 py-4 w-[200px]"><a href="{% url 'supplier:supplier_detail' supplier.supplier.pk  %} "> {{ supplier.supplier.name }}</a></td>
+                            <td class="border-red-400 border-lg px-1 py-4 w-[120px]"><a href="{% url 'supplier:invoice_detail' supplier.pk %} ">{{ supplier.number }}</a></td>
+                            <td class="border-red-400 border-lg px-1 py-4 w-[120px]">{{ supplier.total_price|intcomma }}</td>
+                            <td class="border-red-400 border-lg px-1 py-4 w-[120px]">{{ supplier.date|date:"d-m-y" }}</td>
+
+                    <!--        <th class="px-3 py-4 text-right">-->
+                    <!--             <a href="{% url 'supplier:delete_invoice' supplier.pk %} " class=" hover:bg-red-500 hover:p-1 hover:rounded-lg mr-2"> Supprimer </a>-->
+                    <!--        </th>-->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+<!--    -&#45;&#45;&#45;&#45;&#45;&#45;&#4#45;&#45;&#45;&#45;&#45;-->
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <caption class="text-xl font-semibold"> Facture Client</caption>
+
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 capitalize">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Client
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Numero
+                        </th>
+
+                        <th scope="col" class="px-6 py-3">
+                            Montant
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            date
+                        </th>
+<!--                        <th scope="col" class="px-6 py-3">-->
+<!--                            <span class="sr-only">Action</span>-->
+<!--                        </th>-->
+                    </tr>
+                </thead>
+                <tbody id="client">
+                    {% for client in client %}
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="px-3 py-4"><a href="{% url 'customer:detail' client.customer.pk%} ">{{ client.customer.name }} {{ client.customer.prenom }}</a></td>
+                            <td class="px-3 py-4"><a href="{% url 'facture:invoice_detail' client.pk %} ">{{ client.number }}</a></td>
+                            <td class="px-3 py-4">{{ client.total_price|intcomma }}</td>
+                            <td class="px-3 py-4">{{ client.date|date:"d-m-y" }}</td>
+
+<!--                        <th class="px-3 py-4 text-right">-->
+<!--                             <a href="{% url 'facture:delete_invoice' client.pk %} " class=" hover:bg-red-500 hover:p-1 hover:rounded-lg mr-2"> Supprimer </a>-->
+<!--                        </th>-->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+</div>
+ <script>
+        // Détection du défilement
+        window.addEventListener('scroll', function() {
+            const nearBottom = (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100;
+            if (nearBottom) {
+                const nextPage = document.querySelector('#posts-container').dataset.nextPage;
+                if (nextPage) {
+                    // Charger la page suivante via HTMX
+                    htmx.ajax('GET', nextPage, { target: '#posts-container' });
+                }
+            }
+        });
+    </script>
+
+
+{% endblock %}

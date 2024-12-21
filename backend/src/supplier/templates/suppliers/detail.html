@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title  %} {{ supplier.name }} {% endblock %}
+{% block content  %}
+<main>
+    <h3 class="text-2xl text-center mt-10 ">Transactions de <br> L'Entreprise <span class="capitalize">{{ supplier.name }} </span></h3>
+    <div>
+<!--        <h4 class="text-center font-semibold text-xl bg-green-400 w-56 mx-auto rounded-lg mt-5 p-2 ">Facture: {{ total_fact|intcomma }}</h4>-->
+
+        <div class="flex space-x-2 w-1/3 m-auto">
+<!--            <h4 class="text-center font-semibold text-xl bg-green-400 w-56 mx-auto rounded-lg mt-5 p-2 ">Versement: {{ total_versmt|intcomma }}</h4>-->
+            {% if not reste and total_fact  %}
+                <h4 class="text-center font-semibold text-xl bg-green-400 w-56 mx-auto rounded-lg mt-5 p-2 ">Soldé</h4>
+            {% else %}
+                <h4 class="text-center font-semibold text-xl bg-green-400 w-56 mx-auto rounded-lg mt-5 p-2 ">Dette: {{ reste|intcomma}}</h4>
+            {% endif %}
+        </div>
+    </div>
+    <div class="ml-10">
+        <a href="{% url 'supplier:create_dep' supplier.pk %}" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+            + Versement
+        </span>
+        </a>
+<!--        {% if customer.prenom %}-->
+<!--            <a href="{% url 'facture:home' customer.pk %}" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">-->
+<!--                <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">-->
+<!--                    + Bon Commande-->
+<!--                </span>-->
+<!--            </a>-->
+<!--        {% else %}-->
+             <a href="{% url 'supplier:home' supplier.pk %}" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+                <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                    + Bon D'achat
+                </span>
+            </a>
+        {% endif %}
+
+</div>
+    <section class="flex m-5 space-x-5">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <caption class="text-xl font-semibold"> Versements</caption>
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+
+                <th scope="col" class="texte-left px-6 py-3">
+                    Montant
+                </th>
+                <th scope="col" class="texte-left px-6 py-3">
+                    date
+                </th>
+                <th scope="col" class="texte-left px-6 py-3">
+                    <span class="sr-only">Action</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for depot in versmt %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+
+<!--                        <td class="px-6 py-4">-->
+<!--                            {{ depot.choice }}-->
+<!--                        </td>-->
+
+
+                <td class="px-6 py-4">
+                    {{ depot.amount|intcomma }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ depot.date }}
+                </td>
+
+                <th class="px-6 py-4 text-right">
+                     <a href="{% url 'transaction:delete_dep' depot.pk %} " class=" hover:bg-red-500 hover:p-1 hover:rounded-lg mr-2"> Supprimer </a>
+                </th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+        </div>
+<!--    -&#45;&#45;&#45;&#45;&#45;&#45;&#4#45;&#45;&#45;&#45;&#45;-->
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <caption class="text-xl font-semibold"> Facture </caption>
+
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 capitalize">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Numero
+                </th>
+
+                <th scope="col" class="px-6 py-3">
+                    Montant
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    date
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    <span class="sr-only">Action</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for retrait in facture %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td class="px-6 py-4"><a href="{% url 'supplier:invoice_detail' retrait.pk %} ">{{ retrait.number }}</a></td>
+                    <td class="px-6 py-4">{{ retrait.total_price|intcomma }}</td>
+                    <td class="px-6 py-4">{{ retrait.date }}</td>
+
+                <th class="px-6 py-4 text-right">
+                     <a href="{% url 'supplier:delete_invoice' retrait.pk %} " class=" hover:bg-red-500 hover:p-1 hover:rounded-lg mr-2"> Supprimer </a>
+                </th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        </div>
+
+</section>
+</main>
+{% endblock %}

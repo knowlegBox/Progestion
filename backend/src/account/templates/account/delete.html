@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title  %} <title>supprimer {{user.name}}</title> {% endblock %}
+{% block content  %}
+<main>
+    <div class="popup">
+
+        <form method="post">
+            {% csrf_token %}
+              <div class=" flex flex-col space-y-2">
+                  <p class="text-red text-2xl font-bold mt-10 ml-10"> Voulez-vous vraiment supprimer <span class="text-red-500">{{ user.name }} {{ user.last_name }} </span></p>
+                  <button type="submit" class="ml-10 bg-red-500 p-1 rounded-lg w-1/4" >Supprimer</button>
+              </div>
+        </form>
+</div>
+</main>
+{% endblock %}

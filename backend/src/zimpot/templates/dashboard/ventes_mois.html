@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ventes du Mois en Cours</title>
+</head>
+<body>
+    <h1>Ventes du Mois en Cours</h1>
+    <ul>
+        {% for vente in ventes_mois %}
+            <li>{{ vente.product__name }} : {{ vente.total_vendu }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

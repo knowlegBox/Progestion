@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+{% block title  %} listes des factures {% endblock %}
+{% block content  %}
+
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>N° Bon</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            {% for fact  in invoices  %}
+                <tbody>
+                    <tr>
+
+                            <td class="border-none">{{fact.customer.name}}</td>
+                            <td class="border-none">{{fact.customer.prenom}}</td>
+                            <td class="border-none"><a href="{% url 'facture:invoice_detail' fact.pk %} " class="text-white dark:text-white">45512454</a></td>
+                            <td class="border-none">{{fact.total_price|intcomma}}</td>
+
+                        <td  class="border-none"><a href="{% url 'facture:delete_invoice' fact.pk  %}"><span class="bg-red-500 text-white font-bold px-1 rounded-full ">x</span></a></td>
+
+                    </tr>
+                </tbody>
+            {% endfor %}
+        </table>
+    </div>
+
+
+
+{% endblock %}

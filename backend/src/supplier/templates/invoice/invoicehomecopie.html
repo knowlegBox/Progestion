@@ -1,0 +1,532 @@
+{% extends 'base.html' %}
+
+{% block title %}Many Invoices{% endblock %}
+{% block content %}
+<div>
+    <div class="max-sm:w-[60%] mt-5 bg-blue-950 pt-2 pb-4 w-1/3 mx-auto border-solid rounded-lg border border-blue-50 text-white">
+        <h1 class="text-center text-serif font-semibold text-2xl text-white">Nouvelle Facture</h1>
+        <div class="mt-2 space-y-1">
+            <p class="ml-5">N°: {{ my_invoice }}</p>
+            <p class="ml-5">Denomination: {{ supplier.name }}</p>
+            <p class="ml-5">Numero: {{ supplier.phone }}</p>
+            <p class="ml-5">Localisation: {{ supplier.address }}</p>
+        </div>
+    </div>
+
+    <div id="invoice" class="flex space-x-2 max-sm:grid grid-rows-2 gap-2">
+        <div class="max-sm:w-full max-sm:mt-5 bg-blue-950 w-2/3 mx-auto rounded-md border-white border-2 p-3 max-h-screen">
+            <div class="grid grid-cols-2 gap-2">
+                <button class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-32" type="button" id="add_line">Nouvelle ligne</button>
+                <input type="datetime" name="invoice_date" placeholder="07/05/2022" class="mx-16">
+            </div>
+
+            <!-- Formulaire pour les lignes de facture -->
+            <form method="POST" action="{% url 'supplier:create_invoice' %}" id="myform">
+                {% csrf_token %}
+
+                <!-- Les lignes de produits seront ajoutées ici -->
+                <div id="form_lines" class="space-y-2 mt-4"></div>
+
+                <button class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-32" type="submit" id="submit_form">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("myform");
+    const add_btn = document.getElementById("add_line");
+    const submit_btn = document.getElementById("submit_form");
+    const form_lines = document.getElementById("form_lines");
+    let num = 0;
+
+    // Crée un champ input dynamique
+    const createInput = (name, placeholder) => {
+        const input = document.createElement("input");
+        input.name = `${name}_${num}`;
+        input.placeholder = placeholder;
+        input.className = "rounded-lg w-full p-2 text-black"; // Ajoutez vos classes CSS ici
+        return input;
+    };
+
+    // Ajoute une nouvelle ligne au formulaire
+    add_btn.addEventListener("click", function () {
+        const div_element = document.createElement("div");
+        div_element.className = "grid grid-cols-4 gap-2";
+
+        const inputs = [
+            { name: "invoice", placeholder: "Invoice" },
+            { name: "product", placeholder: "Product" },
+            { name: "quantity", placeholder: "Quantity" },
+            { name: "price", placeholder: "Price" }
+        ];
+
+        inputs.forEach(input => {
+            div_element.appendChild(createInput(input.name, input.placeholder));
+        });
+
+        form_lines.appendChild(div_element);
+        num++;
+    });
+
+    // Fonction pour collecter les données du formulaire dans un objet
+    const collectFormData = () => {
+        const formData = new FormData(form);
+        let data = {};
+
+        formData.forEach((value, key) => {
+            let [name, index] = key.split("_");
+            if (!data[index]) {
+                data[index] = {};
+            }
+            data[index][name] = value;
+        });
+
+        return data;
+    };
+
+    // Envoie les données en AJAX
+    submit_btn.addEventListener("click", function (e) {
+        e.preventDefault();  // Empêche la soumission par défaut du formulaire
+
+        const data = collectFormData();  // Récupère les données
+        const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+        fetch("{% url 'supplier:create_invoice' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken  // Inclus le CSRF token
+            },
+            body: JSON.stringify(data)  // Envoie les données en JSON
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log("Success:", result);  // Affiche le succès
+        })
+        .catch(error => {
+            console.error("Error:", error);  // Affiche les erreurs
+        });
+    });
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--{% extends 'base.html' %}-->
+
+<!--{% block content %}-->
+<!--<div >-->
+<!--    <div class="max-sm:w-[60%] mt-5 bg-blue-950 pt-2 pb-4 w-1/3 mx-auto border-solid rounded-lg border border-blue-50 text-white">-->
+<!--        <h1 class="text-center text-serif font-semibold text-2xl text-white ">Nouvelle Facuture </h1>-->
+<!--        <div class="mt-2 space-y-1">-->
+<!--            <p class="ml-5">N°: {{ my_invoice }}</p>-->
+<!--            <p class="ml-5">Denomination: {{ supplier.name }}  </p>-->
+<!--            <p class="ml-5">Numero:{{ supplier.phone }} </p>-->
+<!--            <p class="ml-5">Localisation: {{supplier.address}}</p>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+<!--<div id="invoice" class="flex space-x-2 max-sm:grid grid-rows-2 gap-2">-->
+<!--&lt;!&ndash;    <div  class="max-sm:w-full mx-auto bg-gray-700 h-full w-1/3 rounded-md border-white border-2 p-3 sm:flex-col"  >&ndash;&gt;-->
+<!--&lt;!&ndash;        <div id="">&ndash;&gt;-->
+
+<!--&lt;!&ndash;            <div id="search" class="my-5 mx-auto flex flex-col">&ndash;&gt;-->
+<!--&lt;!&ndash;                <h4 class="text-center font-semibold font-serif">Rechercher Produit</h4>&ndash;&gt;-->
+<!--&lt;!&ndash;                <form action="" method="get" class="mx-auto w-96">&ndash;&gt;-->
+<!--&lt;!&ndash;                    {% csrf_token %}&ndash;&gt;-->
+<!--&lt;!&ndash;                    <input  autocomplete="off"&ndash;&gt;-->
+<!--&lt;!&ndash;                            hx-post="{% url 'search:product' %}"&ndash;&gt;-->
+<!--&lt;!&ndash;                            hx-trigger="keyup delay:300ms"&ndash;&gt;-->
+<!--&lt;!&ndash;                            hx-target="#product"&ndash;&gt;-->
+<!--&lt;!&ndash;                            type="text" name="search"  class=" w-96  rounded-lg text-black">&ndash;&gt;-->
+<!--&lt;!&ndash;                </form>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--    <div  class="max-sm:w-full max-sm:mt-5 bg-blue-950 w-2/3 mx-auto rounded-md border-white border-2 p-3 max-h-screen"  >-->
+<!--       <div class="grid grid-cols-2 gap-2">-->
+<!--            <button-->
+<!--                class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-32"-->
+<!--                type="button", id="add_line"> Nouvelle ligne </button>-->
+<!--           <input type="datetime" name="" placeholder="07/05/2022" class="mx-16">-->
+<!--       </div>-->
+
+<!--        <form method="POST" action="{% url 'supplier:create_invoice' %}" id="myform">-->
+<!--            {% csrf_token %}-->
+
+
+<!--            <button class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-32" type="submit">Enregistrer</button>-->
+<!--        </form>-->
+
+<!--    </div>-->
+<!--</div>-->
+
+<!--</div>-->
+<!--{% endblock %}-->
+
+
+
+
+
+
+<!--{% extends 'base.html' %}-->
+
+<!--{% block title %}Many Invoices{% endblock %}-->
+<!--{% block content %}-->
+<!--<div>-->
+<!--    <div class="max-sm:w-[60%] mt-5 bg-blue-950 pt-2 pb-4 w-1/3 mx-auto border-solid rounded-lg border border-blue-50 text-white">-->
+<!--        <h1 class="text-center text-serif font-semibold text-2xl text-white">Nouvelle Facture</h1>-->
+<!--        <div class="mt-2 space-y-1">-->
+<!--            <p class="ml-5">N°: {{ my_invoice }}</p>-->
+<!--            <p class="ml-5">Denomination: {{ supplier.name }}</p>-->
+<!--            <p class="ml-5">Numero: {{ supplier.phone }}</p>-->
+<!--            <p class="ml-5">Localisation: {{ supplier.address }}</p>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div id="invoice" class="flex space-x-2 max-sm:grid grid-rows-2 gap-2">-->
+<!--        <div class="max-sm:w-full max-sm:mt-5 bg-blue-950 w-2/3 mx-auto rounded-md border-white border-2 p-3 max-h-screen">-->
+<!--            <div class="grid grid-cols-2 gap-2">-->
+<!--                <button class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-32" type="button" id="add_line">Nouvelle ligne</button>-->
+<!--                <input type="datetime" name="add_date" placeholder="07/05/2022" class="mx-16">-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Formulaire pour les lignes de facture &ndash;&gt;-->
+<!--            <form method="POST" action="{% url 'supplier:create_invoice' %}" id="myform">-->
+<!--                {% csrf_token %}-->
+
+<!--                &lt;!&ndash; Conteneur pour les lignes de produits &ndash;&gt;-->
+<!--                <div id="form_lines" class="space-y-2 mt-4"></div>-->
+
+<!--                <button class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-32" type="submit" id="submit_form">Enregistrer</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Fenêtre modale &ndash;&gt;-->
+<!--<div id="myModal" class="fixed inset-0 hidden justify-center items-center bg-gray-800 bg-opacity-50 z-50">-->
+<!--    <div class="bg-white p-4 rounded shadow-lg w-1/3">-->
+<!--        <p id="modalMessage" class="text-center text-lg font-semibold"></p>-->
+<!--        <button id="closeModal" class="block mx-auto mt-4 px-4 py-2 bg-blue-500 text-white rounded">OK</button>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    const form = document.getElementById("myform");-->
+<!--    const add_btn = document.getElementById("add_line");-->
+<!--    const submit_btn = document.getElementById("submit_form");-->
+<!--    const form_lines = document.getElementById("form_lines");-->
+<!--    const modal = document.getElementById("myModal");-->
+<!--    const modalMessage = document.getElementById("modalMessage");-->
+<!--    const closeModal = document.getElementById("closeModal");-->
+<!--    let num = 0;-->
+
+<!--    // Fonction pour créer un champ input dynamique-->
+<!--    const createInput = (name, placeholder) => {-->
+<!--        const input = document.createElement("input");-->
+<!--        input.name = `${name}_${num}`;-->
+<!--        input.placeholder = placeholder;-->
+<!--        input.className = "rounded-lg w-full p-2 text-black"; // Ajoutez vos classes CSS ici-->
+<!--        input.required = true; // Rendre les champs obligatoires-->
+<!--        return input;-->
+<!--    };-->
+
+<!--    // Fonction pour créer un bouton de suppression-->
+<!--    const createDeleteButton = () => {-->
+<!--        const button = document.createElement("button");-->
+<!--        button.type = "button";-->
+<!--        button.textContent = "Sup";-->
+<!--        button.className = "delete-line bg-red-500 text-white px-3 py-1 rounded";-->
+<!--        return button;-->
+<!--    };-->
+
+<!--    // Ajoute une nouvelle ligne au formulaire-->
+<!--    add_btn.addEventListener("click", function () {-->
+<!--        const div_element = document.createElement("div");-->
+<!--&lt;!&ndash;        div_element.className = "grid grid-cols-5 gap-2 form-line border p-2 rounded-md";&ndash;&gt;-->
+<!--        div_element.className = "flex gap-2 form-line border p-2 rounded-md";-->
+
+<!--        const inputs = [-->
+<!--            { name: "category", placeholder: "Catégorie" },-->
+<!--            { name: "product", placeholder: "Product" },-->
+<!--            { name: "unity", placeholder: "Unité" },-->
+<!--            { name: "quantity", placeholder: "Quantity" },-->
+<!--            { name: "price", placeholder: "Price" }-->
+<!--        ];-->
+
+<!--        inputs.forEach(input => {-->
+<!--            div_element.appendChild(createInput(input.name, input.placeholder));-->
+<!--        });-->
+
+<!--        // Créer et ajouter le bouton de suppression-->
+<!--        const delete_btn = createDeleteButton();-->
+<!--        div_element.appendChild(delete_btn);-->
+
+<!--        // Ajouter l'élément de ligne au conteneur-->
+<!--        form_lines.appendChild(div_element);-->
+<!--        num++;-->
+<!--    });-->
+
+<!--    // Utiliser la délégation d'événements pour gérer les suppressions-->
+<!--    form_lines.addEventListener("click", function (e) {-->
+<!--        if (e.target && e.target.matches("button.delete-line")) {-->
+<!--            const line = e.target.parentElement;-->
+<!--            form_lines.removeChild(line);-->
+<!--        }-->
+<!--    });-->
+
+<!--    // Fonction pour collecter les données du formulaire dans un objet-->
+<!--    const collectFormData = () => {-->
+<!--        const formData = new FormData(form);-->
+<!--        let data = {};-->
+
+<!--        formData.forEach((value, key) => {-->
+<!--            let [name, index] = key.split("_");-->
+<!--            if (!data[index]) {-->
+<!--                data[index] = {};-->
+<!--            }-->
+<!--            data[index][name] = value;-->
+<!--        });-->
+
+<!--        return data;-->
+<!--    };-->
+
+<!--    // Fonction pour afficher la fenêtre modale avec un message-->
+<!--    const showModal = (message) => {-->
+<!--        modalMessage.textContent = message;-->
+<!--        modal.classList.remove("hidden");-->
+<!--        modal.classList.add("flex");-->
+<!--    };-->
+
+<!--    // Fonction pour masquer la fenêtre modale-->
+<!--    closeModal.addEventListener("click", function () {-->
+<!--        modal.classList.add("hidden");-->
+<!--        modal.classList.remove("flex");-->
+<!--    });-->
+
+<!--    // Soumission du formulaire avec AJAX-->
+<!--    submit_btn.addEventListener("click", function (e) {-->
+<!--        e.preventDefault();  // Empêche la soumission par défaut du formulaire-->
+
+<!--        const data = collectFormData();  // Récupère les données-->
+<!--        const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;-->
+
+<!--        fetch("{% url 'supplier:create_invoice' %}", {-->
+<!--            method: "POST",-->
+<!--            headers: {-->
+<!--                "Content-Type": "application/json",-->
+<!--                "X-CSRFToken": csrftoken  // Inclus le CSRF token-->
+<!--            },-->
+<!--            body: JSON.stringify(data)  // Envoie les données en JSON-->
+<!--        })-->
+<!--        .then(response => response.json())-->
+<!--        .then(result => {-->
+<!--            if (result.message) {-->
+<!--                showModal(result.message);  // Affiche la modale avec un message de succès-->
+<!--                form.reset();  // Réinitialise le formulaire si nécessaire-->
+<!--                form_lines.innerHTML = "";  // Supprime toutes les lignes de formulaire ajoutées-->
+<!--                num = 0;  // Réinitialise l'index-->
+<!--            } else if (result.error) {-->
+<!--                showModal(result.error);  // Affiche la modale avec un message d'erreur-->
+<!--            }-->
+<!--        })-->
+<!--        .catch(error => {-->
+<!--            console.error("Error:", error);  // Affiche les erreurs-->
+<!--            showModal("Une erreur est survenue. Veuillez réessayer.");-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+<!--{% endblock %}-->
+
+
+
+
+
+
+
+
+
+{% extends 'base.html' %}
+
+{% block title %}Many Invoices{% endblock %}
+{% block content %}
+<div>
+    <div class="max-sm:w-[60%] mt-5 bg-blue-950 pt-2 pb-4 w-1/3 mx-auto border-solid rounded-lg border border-blue-50 text-white">
+        <h1 class="text-center text-serif font-semibold text-2xl text-white">Nouvelle Facture</h1>
+        <div class="mt-2 space-y-1">
+            <p class="ml-5">N°: {{ my_invoice }}</p>
+            <p class="ml-5">Denomination: {{ supplier.name }}</p>
+            <p class="ml-5">Numero: {{ supplier.phone }}</p>
+            <p class="ml-5">Localisation: {{ supplier.address }}</p>
+        </div>
+    </div>
+
+    <div id="invoice" class="flex space-x-2 max-sm:grid grid-rows-2 gap-2">
+        <div class="max-sm:w-full max-sm:mt-5 bg-blue-950 w-2/3 mx-auto rounded-md border-white border-2 p-3 max-h-screen">
+            <div class="grid grid-cols-2 gap-2">
+                <button class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-32" type="button" id="add_line">Nouvelle ligne</button>
+                <input type="datetime" name="add_date" placeholder="07/05/2022" class="mx-16">
+            </div>
+
+            <!-- Formulaire pour les lignes de facture -->
+            <form method="POST" action="{% url 'supplier:create_invoice' %}" id="myform">
+                {% csrf_token %}
+
+                <!-- Conteneur pour les lignes de produits -->
+                <div id="form_lines" class="space-y-2 mt-4"></div>
+
+                <button class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-32" type="submit" id="submit_form">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Fenêtre modale -->
+<div id="myModal" class="fixed inset-0 hidden justify-center items-center bg-gray-800 bg-opacity-50 z-50">
+    <div class="bg-white p-4 rounded shadow-lg w-1/3">
+        <p id="modalMessage" class="text-center text-lg font-semibold"></p>
+        <button id="closeModal" class="block mx-auto mt-4 px-4 py-2 bg-blue-500 text-white rounded">OK</button>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("myform");
+    const add_btn = document.getElementById("add_line");
+    const submit_btn = document.getElementById("submit_form");
+    const form_lines = document.getElementById("form_lines");
+    const modal = document.getElementById("myModal");
+    const modalMessage = document.getElementById("modalMessage");
+    const closeModal = document.getElementById("closeModal");
+    let num = 0;
+
+    // Fonction pour créer un champ input dynamique
+    const createInput = (name, placeholder) => {
+        const input = document.createElement("input");
+        input.name = `${name}_${num}`;
+        input.placeholder = placeholder;
+        input.className = "rounded-lg w-full p-2 text-black"; // Ajoutez vos classes CSS ici
+        input.required = true; // Rendre les champs obligatoires
+        return input;
+    };
+
+    // Fonction pour créer un bouton de suppression
+    const createDeleteButton = () => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = "Sup";
+        button.className = "delete-line bg-red-500 text-white px-3 py-1 rounded";
+        return button;
+    };
+
+    // Ajoute une nouvelle ligne au formulaire
+    add_btn.addEventListener("click", function () {
+        const div_element = document.createElement("div");
+<!--        div_element.className = "grid grid-cols-5 gap-2 form-line border p-2 rounded-md";-->
+        div_element.className = "flex gap-2 form-line border p-2 rounded-md";
+
+        const inputs = [
+            { name: "category", placeholder: "Catégorie" },
+            { name: "product", placeholder: "Product" },
+            { name: "unity", placeholder: "Unité" },
+            { name: "quantity", placeholder: "Quantity" },
+            { name: "price", placeholder: "Price" }
+        ];
+
+        inputs.forEach(input => {
+            div_element.appendChild(createInput(input.name, input.placeholder));
+        });
+
+        // Créer et ajouter le bouton de suppression
+        const delete_btn = createDeleteButton();
+        div_element.appendChild(delete_btn);
+
+        // Ajouter l'élément de ligne au conteneur
+        form_lines.appendChild(div_element);
+        num++;
+    });
+
+    // Utiliser la délégation d'événements pour gérer les suppressions
+    form_lines.addEventListener("click", function (e) {
+        if (e.target && e.target.matches("button.delete-line")) {
+            const line = e.target.parentElement;
+            form_lines.removeChild(line);
+        }
+    });
+
+    // Fonction pour collecter les données du formulaire dans un objet
+    const collectFormData = () => {
+        const formData = new FormData(form);
+        let data = {};
+
+        formData.forEach((value, key) => {
+            let [name, index] = key.split("_");
+            if (!data[index]) {
+                data[index] = {};
+            }
+            data[index][name] = value;
+        });
+
+        return data;
+    };
+
+    // Fonction pour afficher la fenêtre modale avec un message
+    const showModal = (message) => {
+        modalMessage.textContent = message;
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+    };
+
+    // Fonction pour masquer la fenêtre modale
+    closeModal.addEventListener("click", function () {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+    });
+
+    // Soumission du formulaire avec AJAX
+    submit_btn.addEventListener("click", function (e) {
+        e.preventDefault();  // Empêche la soumission par défaut du formulaire
+
+        const data = collectFormData();  // Récupère les données
+        const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+        fetch("{% url 'supplier:create_invoice' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken  // Inclus le CSRF token
+            },
+            body: JSON.stringify(data)  // Envoie les données en JSON
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.message) {
+                showModal(result.message);  // Affiche la modale avec un message de succès
+                form.reset();  // Réinitialise le formulaire si nécessaire
+                form_lines.innerHTML = "";  // Supprime toutes les lignes de formulaire ajoutées
+                num = 0;  // Réinitialise l'index
+            } else if (result.error) {
+                showModal(result.error);  // Affiche la modale avec un message d'erreur
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);  // Affiche les erreurs
+            showModal("Une erreur est survenue. Veuillez réessayer.");
+        });
+    });
+</script>
+{% endblock %}

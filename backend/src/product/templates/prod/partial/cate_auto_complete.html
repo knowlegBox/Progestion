@@ -1,0 +1,12 @@
+<ul>
+    {% for category in categories %}
+        <li hx-on="click: setCategory('{{ category.name }}')">{{ category.name }}</li>
+    {% endfor %}
+</ul>
+
+<script>
+    function setCategory(categoryName) {
+        document.getElementById('category-input').value = categoryName;
+        document.getElementById('category-results').innerHTML = '';  // Clear the results once a category is selected
+    }
+</script>

@@ -1,0 +1,14 @@
+{% load humanize %}
+
+{% for supplier in supplier %}
+    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+        <td class="border-red-400 border-lg px-1 py-4 w-[200px]"><a href="{% url 'supplier:supplier_detail' supplier.supplier.pk  %} ">{{ supplier.supplier.name }}</a></td>
+        <td class="border-red-400 border-lg px-1 py-4 w-[120px]"><a href="{% url 'supplier:invoice_detail' supplier.pk %} ">{{ supplier.number }}</a></td>
+        <td class="border-red-400 border-lg px-1 py-4 w-[120px]">{{ supplier.total_price|intcomma }}</td>
+        <td class="border-red-400 border-lg px-1 py-4 w-[120px]">{{ supplier.date|date:"d-m-y" }}</td>
+
+<!--        <th class="px-3 py-4 text-right">-->
+<!--             <a href="{% url 'supplier:delete_invoice' supplier.pk %} " class=" hover:bg-red-500 hover:p-1 hover:rounded-lg mr-2"> Supprimer </a>-->
+<!--        </th>-->
+    </tr>
+{% endfor %}

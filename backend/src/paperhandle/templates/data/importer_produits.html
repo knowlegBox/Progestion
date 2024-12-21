@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form enctype="multipart/form-data" method="post" action=" {% url 'pdf:file_data' %}  ">
+    {% csrf_token %}
+    <label for="excel_file">Choisir un fichier excel </label>
+    <input type="file" name="excel_file" id="excel_file">
+    <button type="submit" class="">Importer</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!-- myapp/templates/item_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Items</title>
+</head>
+<body>
+    <h2>Items</h2>
+    <a href="{% url 'generate_pdf' %}">Télécharger le PDF</a>
+    <ul>
+        {% for item in items %}
+        <li>{{ item.name }} - <a href="{% url 'item_update' item.pk %}">Edit</a> - <a href="{% url 'item_delete' item.pk %}">Delete</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'logout' %}">Logout</a>
+</body>
+</html>
+<!-- myapp/templates/item_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Items</title>
+</head>
+<body>
+    <h2>Items</h2>
+    <a href="{% url 'generate_pdf' %}">Télécharger le PDF</a>
+    <ul>
+        {% for item in items %}
+        <li>{{ item.name }} - <a href="{% url 'item_update' item.pk %}">Edit</a> - <a href="{% url 'item_delete' item.pk %}">Delete</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'logout' %}">Logout</a>
+</body>
+</html>
+<!-- myapp/templates/item_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Items</title>
+</head>
+<body>
+    <h2>Items</h2>
+    <a href="{% url 'generate_pdf' %}">Télécharger le PDF</a>
+    <ul>
+        {% for item in items %}
+        <li>{{ item.name }} - <a href="{% url 'item_update' item.pk %}">Edit</a> - <a href="{% url 'item_delete' item.pk %}">Delete</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'logout' %}">Logout</a>
+</body>
+</html>

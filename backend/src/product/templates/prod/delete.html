@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title  %} Créer Produit {% endblock %}
+{% block content  %}
+<!--    <div class="w-1/2 mt-32 mx-auto text-xl">-->
+<!--        <form action="" method="post">-->
+<!--        {% csrf_token %}-->
+<!--        Voulez-vous vraiment supprimer <span class="normal-case font-bold underline underline-offset-4" style=""> {{ product.name }} </span>-->
+<!--            ainsi que toutes les transactions associées.-->
+<!--            {% if produit %}-->
+<!--                <p class="text-xs mt-5 "> Vous allez supprimer tous ces produits presant dans cette catégorie</p>-->
+<!--                {% for prod in produit %}-->
+<!--                    <ul class="mb-1">-->
+<!--                        <li>- {{ product.name }}</li>-->
+<!--                    </ul>-->
+<!--                {% endfor %}-->
+<!--            {% endif %}-->
+
+<!--            <p>-->
+<!--           <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Supprimer</button>-->
+<!--        </p>-->
+
+<!--    </form>-->
+<!--    </div>-->
+
+    <div class="w-1/2 mt-32 mx-auto text-xl">
+        <form action="" method="post">
+        {% csrf_token %}
+        Voulez-vous vraiment supprimer <span class="normal-case font-bold underline underline-offset-4" style=""> {{ object }} </span>
+            ainsi que toutes ses transactions :
+            {% if produit %}
+                <p class="text-xs mt-5 "> Vous allez supprimer tous ces produits presant dans cette catégorie</p>
+                {% for prod in produit %}
+                    <ul class="mb-1">
+                        <li>- {{ prod.name }}</li>
+                    </ul>
+                {% endfor %}
+            {% endif %}
+            {% if ventejour %}
+            <p>Vente(s) journalière(s) liée(s) à ce produit</p>
+                {% for vente in ventejour %}
+
+                    <ul class="mb-1">
+                            <li>- {{ vente.product }}: {{ vente.date}}</li>
+                    </ul>
+                {% endfor %}
+            {% endif %}
+            {% if invoice_item %}
+                   <p>Facture(s) liée(s) à ce produit</p>
+
+                    {% for item in invoice_item  %}
+                        <ul class="mb-1">
+                                <li>- Bon N° {{ item.invoice.number }}</li>
+                        </ul>
+                    {% endfor %}
+            {% endif %}
+            <p>
+           <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Supprimer</button>
+        </p>
+
+    </form>
+    </div>
+
+{% endblock %}
+<!--    <div id="cat">-->
+<!--        <button-->
+<!--                hx-get="{% url 'product:categorie' %}"-->
+<!--                hx-target="#cat"-->
+<!--                hx-swap="outerHTML"-->
+<!--        >+ Catégorie</button>-->
+<!--    </div>-->

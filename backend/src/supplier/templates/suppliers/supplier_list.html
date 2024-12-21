@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block title  %} Liste des Fournisseurs {% endblock %}
+
+{% block content %}
+
+    <div>
+        <a href="{% url 'supplier:supplier_create' %}" class="relative inline-flex items-center ml-28 justify-center mt-10 p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                + Fournisseur
+            </span>
+        </a>
+        <div class="relative w-5/6 overflow-x-auto shadow-md sm:rounded-lg mx-auto">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 max-h-32 overflow-y-auto">
+            <caption>Nombre Total: {{ suppliers|length }}</caption>
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Denommination
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Adresse
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Numero
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Email
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <span >Action</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="">
+                {% for supplier in suppliers %}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 ">
+                        <td scope="row" class="px-3 py-2 font-medium text-gray-900 text-wrap w-[25%] overflow-hidden dark:text-white">
+                                <a href="{% url 'supplier:supplier_detail' supplier.id %}" class="text-blue-800">
+                                    {{ supplier.name|capfirst }}
+                                </a>
+                        </td>
+                        <td scope="row" class="px-3 py-2 font-medium text-gray-900 whitespace-wrap dark:text-white w-[20%]">
+                                <a href="{% url 'supplier:supplier_detail' supplier.id %}" class="text-blue-800">
+                                    {{ supplier.address|capfirst }}x
+                                </a>
+                        </td>
+                        <td class="px-3 py-2 font-medium text-gray-900  dark:text-white w-[20%]">
+                            {{ supplier.phone }}
+                        </td>
+
+
+                        <td class="px-3 py-2 font-medium text-gray-900  dark:text-white w-[20%]">
+                            {{ supplier.email }}
+                        </td>
+
+                    <td class=" text-center flex gap-2 px-3 py-2 font-medium text-gray-900  dark:text-white">
+                     <a href="{% url 'supplier:supplier_delete' supplier.id %} " class=" hover:bg-red-500 hover:rounded-lg"> Supprimer </a>
+                     <a href="{% url 'supplier:supplier_update' supplier.id %} " class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg"> Modifier </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+       <div>
+            <a href="{% url 'supplier:supplier_create' %}" class="relative inline-flex items-center ml-28 justify-center mt-10 p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+         + Fournisseur
+            </span>
+        </a>
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-2/3 m-auto">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+<!--        <caption class="text-2l font-bold dark:text-white text-black "> {{ cat.name }} : <span>{{ qtite }} unité(s)</span></caption>-->
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3 max-sm:text-sm">
+                    Denommination
+                </th>
+                <th scope="col" class="px-6 py-3 max-sm:text-sm">
+                    Adresse
+                </th>
+                <th scope="col" class="px-6 py-3 max-sm:text-sm">
+                    Numero
+                </th>
+                <th scope="col" class="px-6 py-3 max-sm:text-sm">
+                    Email
+                </th>
+                <th scope="col" class="px-6 py-3 max-sm:text-sm">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for supplier in suppliers %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <a href="{% url 'supplier:supplier_detail' supplier.id %}" class="text-blue-800">{{ supplier.name|capfirst }}</a>
+                </td>
+                <td class="px-6 py-4">
+                    {{ supplier.address|capfirst }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ supplier.phone }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ supplier.email }}
+                </td>
+
+                <td class="px-6 py-4 text-right space-x-2">
+                     <a href="{% url 'supplier:supplier_delete' supplier.id %} " class=" hover:bg-red-500 hover:p-1 hover:rounded-lg"> Supprimer </a>
+                     <a href="{% url 'supplier:supplier_update' supplier.id %} " class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-5"> Modifier </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    </div>

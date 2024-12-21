@@ -1,0 +1,41 @@
+{% load humanize %}
+
+{% for prod in product %}
+    <tr id="rowid-{{prod.pk}}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+        <td class="px-3 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ prod.category|capfirst }}</td>
+        <td class="px-3 py-4 w-[250px]">
+            <div hx-put="{% url 'product:update' prod.pk %}"
+                 hx-target="#rowid-{{prod.pk}}"
+                 hx-trigger="change from:input"
+                 contenteditable="true"
+                 hx-include="[contenteditable]" data-name="product-name">
+                 <a href="{% url 'supplier:tab_create_stock' prod.pk %}" class="text-blue-600">{{ prod.name|capfirst }}</a>
+            </div>
+        </td>
+        <td class="px-3 py-4">
+            <div>
+            {{ prod.quantity|intcomma }}
+            </div>
+        </td>
+        <td class="px-3 py-4">
+
+                 {{ prod.unity }}
+        </td>
+
+        <td class="px-3 py-4">
+            <div hx-put="{% url 'product:update' prod.pk %}"
+                 hx-target="#rowid-{{prod.pk}}"
+                 hx-trigger="change from:input"
+                 contenteditable="true"
+                 hx-include="[contenteditable]" data-name="price">
+                {{ prod.price|intcomma }}
+            </div>
+        </td>
+        <td class="px-3 py-4">{{ prod.disponibility }}</td>
+        <td class="px-3 py-4">{{ prod.date }}</td>
+        <td class="px-3 py-4 text-right">
+            <a href="{% url 'product:delete' prod.pk %}" class="hover:bg-red-500 hover:p-1 hover:rounded-lg">Supprimer</a>
+<!--            <a href="{% url 'product:update' prod.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-5">Modifier</a>-->
+        </td>
+    </tr>
+{% endfor %}

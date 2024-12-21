@@ -137,6 +137,7 @@ env.bak/
 venv.bak/
 backend/venv/
 electron-django/node_modules/
+backend/src/theme/
 # Spyder project settings
 .spyderproject
 .spyproject

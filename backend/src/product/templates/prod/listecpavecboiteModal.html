@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %} listes Produits {% endblock %}
+{% block content %}
+    <div id="product" class="mt-10">
+        <div id="prod_form" class="ml-28">
+            <a href="{% url 'product:create' %}" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+               <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                + Produit
+               </span>
+            </a>
+            {% include 'prod/partial/prod_create_partial.html' %}
+        </div>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-5/6 rounded-lg mx-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-3  py-3">
+                                Categorie
+                            </th>
+                            <th scope="col" class="px-3  py-3">
+                                Nom
+                            </th>
+                            <th scope="col" class="px-3  py-3">
+                                Quantité
+                            </th>
+                            <th scope="col" class="px-3  py-3">
+                                Unité
+                            </th>
+                            <th scope="col" class="px-3  py-3">
+                                Prix
+                            </th>
+<!--                            <th scope="col" class="px-3  py-3">-->
+<!--                                Disponibilité-->
+<!--                            </th>-->
+                            <th scope="col" class="px-3  py-3">
+                                Date
+                            </th>
+                             <th scope="col" class="px-3  py-3">
+                                Action
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for prod in product %}
+                    <tr id="#rowid-{{prod.pk}}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td scope="row"  class="px-3  py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ prod.category|capfirst }}
+                    </td>
+                    <td class="px-3  py-4">
+                        <div
+                                 contenteditable="true"
+                                 data-name="name"
+                                 data-id="{{ prod.pk }}">
+                             <a href="{% url 'supplier:tab_create_stock' prod.pk %} " class="text-blue-600">{{ prod.name|capfirst }}</a>
+
+                        </div>
+                    </td>
+                    <td class="px-3  py-4">
+                        <div
+                                contenteditable="true"
+                    data-name="quantity"
+                    data-id="{{ prod.pk }}">
+                            {{ prod.quantity|intcomma }}
+                        </div>
+                    </td>
+                    <td class="px-3  py-4">
+                        {{ prod.unity }}
+                    </td>
+                    <td class="px-3  py-4">
+                        <div
+                                contenteditable="true"
+                    data-name="price"
+                    data-id="{{ prod.pk }}">
+                            {{ prod.price|intcomma }}
+                        </div>
+                    </td>
+<!--                    <td class="px-3  py-4">-->
+<!--                        {{ prod.disponibility }}-->
+<!--                    </td>-->
+                    <td class="px-3  py-4">
+                        {{ prod.date }}
+                    </td>
+                    <td class="px-3  py-4 text-right">
+                        <button
+                            hx-get="{% url 'product:delete_modal' prod.pk %}"
+                            hx-target="#modal-content"
+                            hx-trigger="click"
+                            class=" hover:bg-red-500 hover:p-1 hover:rounded-lg">
+                            Supprimer
+                        </button>
+<!--                         <a href="{% url 'product:delete' prod.pk %} " class=" hover:bg-red-500 hover:p-1 hover:rounded-lg"> Supprimer </a>-->
+<!--                         <a href="{% url 'product:update' prod.pk %} " class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-5"> Modifier </a>-->
+                    </td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+                </table>
+            </div>
+    </div>
+<div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div id="modal-content" class="bg-white rounded-lg shadow-lg p-5 w-96">
+        <!-- Le contenu de la modale sera chargé ici via HTMX -->
+    </div>
+</div>
+<script>
+document.addEventListener("focusin", function (e) {
+    if (e.target.hasAttribute("contenteditable") && e.target.getAttribute("data-name") === "price") {
+        // Récupérer le contenu et supprimer les séparateurs de milliers
+        const value = e.target.textContent.trim();
+        const numericValue = parseFloat(value.replace(/\s/g, '').replace(/,/g, ''));
+        if (!isNaN(numericValue)) {
+            e.target.textContent = numericValue; // Afficher le prix sans séparateurs
+        }
+    }
+});
+
+document.addEventListener("focusout", function (e) {
+    if (e.target.hasAttribute("contenteditable")) {
+        const fieldName = e.target.getAttribute("data-name");
+        const productId = e.target.getAttribute("data-id");
+        let newValue = e.target.textContent.trim();
+
+        if (fieldName === "price") {
+            // Supprimer les séparateurs et valider le prix
+            const numericValue = parseFloat(newValue.replace(/\s/g, '').replace(/,/g, ''));
+            if (!isNaN(numericValue)) {
+                newValue = Math.round(numericValue); // Convertir en entier
+                // Ajouter séparateurs de milliers pour l'affichage
+                e.target.textContent = newValue.toLocaleString("fr-FR");
+            } else {
+                alert("Veuillez entrer un nombre valide pour le prix.");
+                return;
+            }
+        }
+
+        // URL de mise à jour basée sur l'ID
+        const url = `/product/update/${productId}/`;
+
+        // Envoi de la requête PUT avec Fetch API
+        fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken") // Si vous utilisez CSRF
+            },
+            body: JSON.stringify({
+                name: fieldName,
+                value: newValue
+            })
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === "success") {
+                    console.log(data.message);
+                } else {
+                    alert(data.message || "Erreur lors de la mise à jour.");
+                }
+            })
+            .catch((error) => console.error("Erreur :", error));
+    }
+});
+
+// Fonction pour récupérer le CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %}

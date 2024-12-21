@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8a76265c-8ce5-4975-9200-4076eedcaac6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/facture/templates/facture/partial/create_invoice.html" beforeDir="false" afterPath="$PROJECT_DIR$/facture/templates/facture/partial/create_invoice.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/facture/templates/facture/partial/invoice_line_item.html" beforeDir="false" afterPath="$PROJECT_DIR$/facture/templates/facture/partial/invoice_line_item.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysearches/templates/invoice_partial.html" beforeDir="false" afterPath="$PROJECT_DIR$/mysearches/templates/invoice_partial.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="2hRbkx3akwrRHS0w5cNImE4ajqa" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8a76265c-8ce5-4975-9200-4076eedcaac6" name="Changes" comment="" />
+      <created>1717559983572</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1717559983572</updated>
+    </task>
+    <servers />
+  </component>
+</project>

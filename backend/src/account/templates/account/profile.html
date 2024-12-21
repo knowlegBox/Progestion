@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title  %} <title>Profile {{ user.nom }}</title> {% endblock %}
+
+{% block content %}
+{% include 'partial/header_for_html.html' %}
+<a href="{% url 'account:update' user.pk %}">Modifier</a>
+ {% if user.shopper.name %}
+    <a href="{% url 'shop:home' slug=user.shopper.slug pk=user.shopper.pk %}">Ma Boutique</a>
+ {% else %}
+    <a href="{% url 'shop:create_shop' %}">Creer une Boutique</a>
+
+ {% endif %}
+<div class="text-capitalize">
+       <h3><span>Avatar: {{user.avatar}}</span></h3>
+
+       <p>Bienvenu: {{user.email}}</p>
+       <h3><span>Derniere connexion: </span>{{user.last_login}}</h3>
+       <h3><span>Date d'Inscriptioin </span>{{user.date_joined}}</h3>
+
+
+       <h3><span>Nom: {{user.username}}</span></h3>
+       <h3><span>Nom: {{user.first_name}}</span></h3>
+       <h3><span>Prenom: {{user.last_name}}</span></h3>
+
+       <h3><span>Contact: {{user.number}}</span></h3>
+
+        <h3><span>Commune: {{user.town}}</span></h3>
+        <h3><span>Quartier: {{user.city}}</span></h3>
+   </div>
+<div class="mt-5">
+        <a href="{% url 'account:delete' user.pk %}" class="bg-red-500 rounded-lg p-2 mt-5">supprimer le compte</a>
+
+</div>
+{% endblock %}
+

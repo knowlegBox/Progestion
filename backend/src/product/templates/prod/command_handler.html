@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title  %} Créer Produit {% endblock %}
+{% block content  %}
+        <div class="">
+                <div class="grid justify-items-center mt-5 mb-5">
+                <h1 class=" text-2xl ">Bon de commande </h1>
+<!--            <h1>{{title}}</h1>-->
+                </div >
+        </div>
+        <div>
+            <a href="{% url 'product:create_vente' %}" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+               <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                + Commande Client
+               </span>
+            </a><a href="{% url 'product:create_vente' %}" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+               <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                + Commande Fournisseur
+               </span>
+            </a>
+        </div>
+        <div class=" w-5/6 mx-auto">
+            <h1
+                    hx-get="{% url 'product:create_command' %}"
+                    hx-target="#table"
+                    hx-swap="beforeend">
+                <span>
+                    +Ligne
+                </span>
+            </h1>
+            <div id="table" style="max-width:930px;" class="w flex flex-wrap wrap text-black  space-x-2 space-y-2 mb-5">
+            {% include 'prod/partial/create_command.html' %}
+        </div>
+            <div id="commande">
+            {% for item in command %}
+                <ul class="flex space-x-2">
+                    <li>{{item.customer}}</li>
+                    <li>{{item.product}}</li>
+                    <li>{{item.quantity}}</li>
+                    <li>{{item.price}}</li>
+                    <li>{{item.add_date}}</li>
+                 </ul>
+            {% endfor %}
+        </div>
+        </div>
+
+{% endblock %}
+
+
+
+
+
+
+
+        <a href="{% url 'myhome' %} " class="bg-green-400">Retourner aux Produits</a>
+        <form method="post" >
+        {% csrf_token %}
+<!--        <div id="table"  class="w-2/3 mx-auto grid grid-rows-10 grid-flow-col grid-cols-5 gap-4 text-black bg-white">-->
+<!--        <div id="table"  style="max-width:690px;" class="mx-auto flex flex-wrap wrap text-black  space-x-2 space-y-2">-->
+<!--                    {{form.as_p}}-->
+
+<!--        </div>-->
+            <div class="text-black flex flex-col w-96 items-center">
+                <textarea name="product" id="all_product" cols="30" rows="10"></textarea>
+                <select name="status" id="status_id">
+                    <option value="en cours" selected="">En attente</option>
+                    <option value="Effectué">Effectué</option>
+                </select>
+                <input type="date" name="sold_date" id="sold_date">
+            </div>
+        <div class=" flex mt-5 items-center justify-center">
+                <button type="submit" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-green-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+                    <span class="relative px-10 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                        Enregistrer
+                    </span>
+                </button>
+        </div>
+    </form>
+    </div>
+<!--    <div id="cat">-->
+<!--        <button-->
+<!--                hx-get="{% url 'product:categorie' %}"-->
+<!--                hx-target="#cat"-->
+<!--                hx-swap="outerHTML"-->
+<!--        >+ Catégorie</button>-->
+<!--    </div>-->

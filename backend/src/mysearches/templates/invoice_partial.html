@@ -1,0 +1,32 @@
+{% load humanize %}
+
+<table class="w-full">
+    <thead>
+        <tr class=>
+            <th class="">Produits</th>
+            <th class=""> Prix</th>
+            <th class="">Ajouter</th>
+        </tr>
+    </thead>
+    <tbody>
+       {% for prod in products %}
+       <tr class="">
+           <td class="border-none">
+               {{prod.name}}
+           </td>
+           <td class="border-none">
+               {{prod.price|intcomma}}
+           </td>
+
+           <td class="border-none">
+                    <a hx-get="{% url 'facture:add_line' prod.pk %}"
+                                   hx-target="#invoice-line"
+                                   hx-swap="beforeend"
+                                   class="font-medium text-blue-600 dark:text-blue-500 hover:bg-green-400 hover:text-black hover:rounded-lg hover:p-1 hover:w-5">Ajouté</a>
+                         </td>
+       </tr>
+       {% endfor %}
+        </tbody>
+</table>
+
+

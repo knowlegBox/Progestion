@@ -1,0 +1,16 @@
+<h2 class="text-lg font-bold mb-4">Confirmer la suppression</h2>
+<p>Êtes-vous sûr de vouloir supprimer {{suppress_object}} <strong>{{ object.name }}</strong> ?</p>
+<div id="model" class="flex justify-end space-x-3 mt-4">
+    <button
+        class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
+        onclick="document.getElementById('modal').classList.add('hidden')">
+        Annuler
+    </button>
+    <button
+        hx-delete="{% url 'product:delete' object.pk %}"
+        hx-target="closest tr"
+        hx-swap="outerHTML"
+        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+        Supprimer
+    </button>
+</div>

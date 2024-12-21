@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title  %} Supprimer Client {% endblock %}
+
+
+{% block content  %}
+
+    <div class="w-1/2 mt-32 mx-auto text-xl">
+        <form action="" method="post">
+        {% csrf_token %}
+        Voulez-vous vraiment supprimer <span class="normal-case font-bold underline underline-offset-4" style=""> {{ customer.name }} {{ customer.prenom }} </span>
+            {% if produit %}
+                <p class="text-xs mt-5 "> Vous allez supprimer tous ces produits presant dans cette catégorie</p>
+                {% for prod in produit %}
+                    <ul class="mb-1">
+                        <li>- {{ prod.name }}</li>
+                    </ul>
+                {% endfor %}
+            {% endif %}
+            <p>
+           <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Supprimer</button>
+        </p>
+
+    </form>
+    </div>
+
+{% endblock %}

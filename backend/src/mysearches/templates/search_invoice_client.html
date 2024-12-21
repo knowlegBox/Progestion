@@ -1,0 +1,16 @@
+{% load humanize %}
+
+{% block content  %}
+{% for client in client %}
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <td class="px-1 py-4"><a href="{% url 'facture:invoice_detail' client.pk %} ">{{ client.customer.name }} {{ client.customer.prenom }}</a></td>
+            <td class="px-1 py-4"><a href="{% url 'facture:invoice_detail' client.pk %} ">{{ client.number }}</a></td>
+            <td class="px-1 py-4">{{ client.total_price|intcomma }}</td>
+            <td class="px-1 py-4">{{ client.date|date:"d-m-y" }}</td>
+<!--            <th class="px-3 py-4 text-right">-->
+<!--            <a href="{% url 'facture:delete_invoice' client.pk %} " class=" hover:bg-red-500 hover:p-1 hover:rounded-lg mr-2"> Supprimer </a>-->
+<!--            </th>-->
+    </tr>
+{% endfor %}
+
+{% endblock %}
