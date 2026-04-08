@@ -4,7 +4,6 @@ from django.db.models import Sum, Prefetch, F
 from django.db.models.functions import TruncMonth
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from weasyprint import HTML
 
 from customers.models import Customer
 from product.models import Product, VenteJournaliere
@@ -87,6 +86,7 @@ def ventes_par_mois_pandas(request):
                }
     html = render(request, 'pdf/ventes_par_mois.html',
                   context).content.decode("utf-8")
+    from weasyprint import HTML
     pdf = HTML(string=html).write_pdf()
     response = HttpResponse(pdf, content_type="application/pdf")
     response["Content-Dispostion"] = "attachment; filename=rapport mensuel.pdf"
@@ -134,6 +134,7 @@ def sold_per_month(request):
     ).order_by('product__name', 'mois')
     context = {'solds': solds}
     html_content = render(request, 'pdf/ventes_par_mois.html', context).content.decode("utf-8")
+    from weasyprint import HTML
     pdf_file = HTML(string=html_content).write_pdf()
     response = HttpResponse(pdf_file, content_type="application/pdf")
     response["Content-Dispostion"] = "inline; filename=mon rapport.pdf"
@@ -149,6 +150,7 @@ def pdf_generator(request):
     # Rendre le template HTML avec les données
     html_content = render(request, "pdf/pdf_template.html", context).content.decode("utf-8")
 
+    from weasyprint import HTML
     pdf_file = HTML(string=html_content).write_pdf()
     response = HttpResponse(pdf_file, content_type="application/pdf")
     response["Content-Dispostion"] = f"inline; filename= rapport du {datetime.datetime.today()}.pdf"
