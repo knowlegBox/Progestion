@@ -69,15 +69,13 @@ class MyInvoiceItem(models.Model):
         return self.price * self.quantity
 
 
-@receiver(post_save, sender=MyInvoice)
-def my_invoice_post_operation(signal, instance, **kwargs):
-    invoice_item = instance.invoice.all()
-    print("invoice_item", invoice_item)
-    for item in invoice_item:
-        # print( "item_pk",item.pk)
-        # print("invoice_item", item.product.name, item.product.pk, item.quantity, item.price)
-        dayly_solde = VenteJournaliere.objects.create(command =item ,    
-                                                        product=item.product,
-                                                      price=item.price,
-                                                      quantity=item.quantity, )
-        # print("dayly_solde:",dayly_solde)
+@receiver(post_save, sender=MyInvoiceItem)
+def record_daily_sale(sender, instance, created, **kwargs):
+    if created:
+        VenteJournaliere.objects.create(
+            command=instance,
+            product=instance.product,
+            price=instance.price,
+            quantity=instance.quantity,
+            add_date=instance.invoice.date
+        )

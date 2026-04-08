@@ -19,6 +19,7 @@ urlpatterns = [
   path("vente/journaliere/supprimer/<int:pk>/", views.DeleteVenteJour.as_view(), name="delete_vente"),
 
   path("vente/journaliere/create/", views.create_daylysold, name="create_vente"),
+  path("vente/journaliere/", views.daily_sales_view, name="daily_sales"),
 
   # *-----------------------------------------* #
   # path("liste/stock/", views.NewStockList.as_view(), name="list_stock"),

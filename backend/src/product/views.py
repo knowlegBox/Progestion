@@ -11,7 +11,9 @@ from django.views import generic
 
 from customers.models import Customer
 from product.form import ProductForm, VentJournaliereform
-from product.models import Product, Category, VenteJournaliere
+from django.db.models import Sum, F
+from django.utils import timezone
+from .models import Product, Category, VenteJournaliere
 from zimpot.utilitaire import new_hold_compare
 
 
@@ -474,3 +476,18 @@ def liste_product_view(request):
 #             html = render_to_string("prod/partials/product_list.html", {"products":products})
 #             return  JsonResponse({"html":html, "has_net":products.has_next()}, status=200)
 #         return super().render_to_response(context, **response_kwargs)
+def daily_sales_view(request):
+    today = timezone.now().date()
+    sales = VenteJournaliere.objects.filter(add_date=today).select_related('product')
+    
+    total_revenue = sales.aggregate(total=Sum('totalprice'))['total'] or 0
+    total_quantity = sales.aggregate(total=Sum('quantity'))['total'] or 0
+    
+    context = {
+        'sales': sales,
+        'today': today,
+        'total_revenue': total_revenue,
+        'total_quantity': total_quantity,
+        'title': "Vente Journalière"
+    }
+    return render(request, "product/daily_sales.html", context)

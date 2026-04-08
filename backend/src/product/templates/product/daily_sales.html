@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Vente Journalière{% endblock %}
+
+{% block content %}
+<div class="mt-10 w-[1200px] mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Rapport des Ventes du Jour</h1>
+        <div class="text-right">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Date : {{ today|date:"d F Y" }}</span>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border-l-4 border-green-500">
+            <p class="text-sm text-gray-500 dark:text-gray-400 uppercase font-semibold">Revenu Total</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ total_revenue|intcomma }} FCFA</p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+            <p class="text-sm text-gray-500 dark:text-gray-400 uppercase font-semibold">Articles Vendus</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ total_quantity|intcomma }}</p>
+        </div>
+    </div>
+
+    <!-- Sales Table -->
+    <div class="relative shadow-md sm:rounded-lg overflow-hidden">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">Produit</th>
+                    <th scope="col" class="px-6 py-3 text-center">Quantité</th>
+                    <th scope="col" class="px-6 py-3 text-center">Prix Unitaire</th>
+                    <th scope="col" class="px-6 py-3 text-right">Total</th>
+                    <th scope="col" class="px-6 py-3 text-center">Heure</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in sales %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                        {{ sale.product.name|capfirst }}
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        {{ sale.quantity|intcomma }}
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        {{ sale.price|intcomma }}
+                    </td>
+                    <td class="px-6 py-4 text-right font-bold text-gray-900 dark:text-white">
+                        {{ sale.totalprice|intcomma }}
+                    </td>
+                    <td class="px-6 py-4 text-center text-xs">
+                        {{ sale.date|date:"H:i" }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-6 py-10 text-center text-gray-500 italic">
+                        Aucune vente enregistrée pour aujourd'hui.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% if sales %}
+            <tfoot class="bg-gray-50 dark:bg-gray-700">
+                <tr class="font-bold text-gray-900 dark:text-white">
+                    <td class="px-6 py-3">TOTAL</td>
+                    <td class="px-6 py-3 text-center">{{ total_quantity|intcomma }}</td>
+                    <td class="px-6 py-3"></td>
+                    <td class="px-6 py-3 text-right text-lg text-green-600 dark:text-green-400">{{ total_revenue|intcomma }} FCFA</td>
+                    <td class="px-6 py-3"></td>
+                </tr>
+            </tfoot>
+            {% endif %}
+        </table>
+    </div>
+</div>
+{% endblock %}

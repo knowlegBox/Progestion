@@ -216,7 +216,7 @@ def invoice_detail(request, invoice_id):
     invoice = get_object_or_404(SupplierInvoices, id=invoice_id)
     invoice_lines = invoice.invoice.all()
     if request.method == "GET":
-        total = invoice.invoice.aggregate(total=Sum(F('quantity') * F('price'), output_field=FloatField()))['total']
+        total = invoice.invoice.aggregate(total=Sum(F('quantity') * F('price'), output_field=FloatField()))['total'] or 0
         invoice.total_price = total
         invoice.save()
 
